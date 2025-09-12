@@ -5,28 +5,30 @@ namespace Tripay\PPOB\Console\Commands;
 use Illuminate\Console\Command;
 use Tripay\PPOB\Facades\Tripay;
 use Tripay\PPOB\Models\Category;
+use Tripay\PPOB\Models\Operator;
 
-class SyncCategoriesCommand extends Command
+class SyncOperatorsCommand extends Command
 {
     /**
      * The name and signature of the console command.
      */
-    protected $signature = 'tripay:sync-categories 
+    protected $signature = 'tripay:sync-operators
                            {--type=all : Sync specific type (prepaid, postpaid, or all)}
-                           {--force : Force update existing categories}';
+                           {--force : Force update existing operators}';
 
     /**
      * The console command description.
      */
-    protected $description = 'Sync product categories from Tripay API to database';
+    protected $description = 'Sync product operators from Tripay API to database';
 
+   
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->info('🔄 Syncing categories from Tripay API...');
-        
+        $this->info('🔄 Syncing operators from Tripay API...');
+
         $type = $this->option('type');
         $force = $this->option('force');
         
@@ -35,19 +37,19 @@ class SyncCategoriesCommand extends Command
             $updated = 0;
             $errors = 0;
 
-            // Sync prepaid categories
+            // Sync prepaid operators
             if ($type === 'all' || $type === 'prepaid') {
-                $this->info('📱 Syncing prepaid categories...');
-                [$prepaidSynced, $prepaidUpdated, $prepaidErrors] = $this->syncCategoriesForType('prepaid', $force);
+                $this->info('📱 Syncing prepaid operators...');
+                [$prepaidSynced, $prepaidUpdated, $prepaidErrors] = $this->syncOperatorsForType('prepaid', $force);
                 $synced += $prepaidSynced;
                 $updated += $prepaidUpdated;
                 $errors += $prepaidErrors;
             }
 
-            // Sync postpaid categories  
+            // Sync postpaid operators  
             if ($type === 'all' || $type === 'postpaid') {
-                $this->info('🏠 Syncing postpaid categories...');
-                [$postpaidSynced, $postpaidUpdated, $postpaidErrors] = $this->syncCategoriesForType('postpaid', $force);
+                $this->info('🏠 Syncing postpaid operators...');
+                [$postpaidSynced, $postpaidUpdated, $postpaidErrors] = $this->syncOperatorsForType('postpaid', $force);
                 $synced += $postpaidSynced;
                 $updated += $postpaidUpdated;
                 $errors += $postpaidErrors;
@@ -55,10 +57,10 @@ class SyncCategoriesCommand extends Command
 
             // Display results
             $this->newLine();
-            $this->info("✅ Categories sync completed!");
+            $this->info("✅ Operators sync completed!");
             $this->table(['Metric', 'Count'], [
-                ['New categories synced', $synced],
-                ['Existing categories updated', $updated],
+                ['New operators synced', $synced],
+                ['Existing operators updated', $updated],
                 ['Errors encountered', $errors],
                 ['Total processed', $synced + $updated + $errors]
             ]);
@@ -66,30 +68,30 @@ class SyncCategoriesCommand extends Command
             return $errors > 0 ? Command::FAILURE : Command::SUCCESS;
             
         } catch (\Exception $e) {
-            $this->error('❌ Failed to sync categories: ' . $e->getMessage());
+            $this->error('❌ Failed to sync operators: ' . $e->getMessage());
             return Command::FAILURE;
         }
     }
 
     /**
-     * Sync categories for a specific type
+     * Sync operators for a specific type
      */
-    protected function syncCategoriesForType(string $type, bool $force): array
+    protected function syncOperatorsForType(string $type, bool $force): array
     {
         $synced = 0;
         $updated = 0;
         $errors = 0;
 
         try {
-            // Get categories from API based on type
+            // Get operators from API based on type
             if ($type === 'prepaid') {
-                $response = Tripay::prepaid()->getCategories();
+                $response = Tripay::prepaid()->getOperators();
             } else {
-                $response = Tripay::postpaid()->getCategories();
+                $response = Tripay::postpaid()->getOperators();
             }
 
             if (!$response->success) {
-                $this->error("Failed to fetch {$type} categories: " . $response->message);
+                $this->error("Failed to fetch {$type} operators: " . $response->message);
                 return [0, 0, 1];
             }
 
@@ -108,8 +110,8 @@ class SyncCategoriesCommand extends Command
                         'synced_at' => now(),
                     ];
 
-                    // Check if category already exists
-                    $existing = Category::where('id', $data['id'])->first();
+                    // Check if operator already exists
+                    $existing = Operator::where('id', $data['id'])->first();
 
                     if ($existing) {
                         if ($force) {

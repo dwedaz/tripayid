@@ -109,19 +109,14 @@ class SyncProductsCommand extends Command
 
                     // Convert API response to array
                     $data = [
-                        'product_id' => $productData->product_id,
-                        'product_name' => $productData->product_name,
-                        'category_id' => $categoryId,
-                        'operator_id' => $operatorId,
-                        'product_price' => $productData->product_price ?? $productData->price ?? 0,
-                        'selling_price' => $productData->selling_price ?? $productData->product_price ?? $productData->price ?? 0,
-                        'description' => $productData->description ?? null,
-                        'type' => $type,
-                        'status' => $productData->status ?? true,
-                        'denomination' => $productData->denomination ?? null,
-                        'additional_info' => isset($productData->additional_info) ? $productData->additional_info : null,
-                        'cut_off_start' => $productData->cut_off_start ?? null,
-                        'cut_off_end' => $productData->cut_off_end ?? null,
+                        'id' => $productData->id,
+                        'name' => $productData->name,
+                        'code' => $productData->code,
+                        'category_id' => $productData->category_id,
+                        'operator_id' => $productData->operator_id,
+                        'price' => $productData->price,
+                        'status' => isset($productData->status) ? (bool)$productData->status : false,
+                        'billing_type' => $type,
                         'synced_at' => now(),
                     ];
 
@@ -131,7 +126,7 @@ class SyncProductsCommand extends Command
                     }
 
                     // Check if product already exists
-                    $existing = Product::where('product_id', $data['product_id'])->first();
+                    $existing = Product::where('id', $data['id'])->first();
 
                     if ($existing) {
                         if ($force) {
