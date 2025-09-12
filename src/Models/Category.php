@@ -15,12 +15,11 @@ class Category extends Model
     protected $table = 'tripay_categories';
 
     protected $fillable = [
-        'category_id',
-        'category_name',
-        'description',
+        'id',
+        'name',
+        'type',
+        'billing_type',
         'status',
-        'type', // prepaid or postpaid
-        'sort_order',
         'synced_at',
     ];
 

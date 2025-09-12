@@ -15,14 +15,13 @@ class Operator extends Model
     protected $table = 'tripay_operators';
 
     protected $fillable = [
-        'operator_id',
-        'operator_name',
-        'operator_code',
-        'description',
+        'id',
+        'code',
+        'name',
         'status',
-        'type', // prepaid or postpaid
+        'category_id',
+        'billing_type',
         'logo_url',
-        'sort_order',
         'synced_at',
     ];
 

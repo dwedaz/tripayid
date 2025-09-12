@@ -6,15 +6,18 @@ use Tripay\PPOB\DTO\DataTransferObject;
 
 class CategoryData extends DataTransferObject
 {
-    public readonly string $category_id;
-    public readonly string $category_name;
-    public readonly ?string $description;
-    
+    public readonly string $id;
+    public readonly string $name;
+    public readonly ?string $type;
+    public readonly bool $status;
+
     public function __construct(array $data = [])
     {
-        $this->category_id = $data['category_id'] ?? $data['product_id'] ?? '';
-        $this->category_name = $data['category_name'] ?? $data['product_name'] ?? '';
-        $this->description = $data['description'] ?? null;
+          
+        $this->id =  $data['id'] ?? '';
+        $this->name =$data['name'] ?? '';
+        $this->type = $data['type'] ?? null;
+        $this->status = isset($data['status']) ? (bool)$data['status'] : false;
     }
 }
 

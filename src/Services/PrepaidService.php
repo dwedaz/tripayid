@@ -2,11 +2,12 @@
 
 namespace Tripay\PPOB\Services;
 
-use Tripay\PPOB\DTO\Request\PrepaidTransactionRequest;
-use Tripay\PPOB\DTO\Response\CategoryResponse;
-use Tripay\PPOB\DTO\Response\ProductDetailResponse;
 use Tripay\PPOB\DTO\Response\ProductResponse;
+use Tripay\PPOB\DTO\Response\CategoryResponse;
+use Tripay\PPOB\DTO\Response\OperatorResponse;
 use Tripay\PPOB\DTO\Response\TransactionResponse;
+use Tripay\PPOB\DTO\Response\ProductDetailResponse;
+use Tripay\PPOB\DTO\Request\PrepaidTransactionRequest;
 
 class PrepaidService extends BaseService
 {
@@ -23,11 +24,11 @@ class PrepaidService extends BaseService
     /**
      * Get prepaid operators
      */
-    public function getOperators(): CategoryResponse
+    public function getOperators(): OperatorResponse
     {
         $response = $this->getCachedData('prepaid_operators', $this->getEndpoint('operators'));
 
-        return CategoryResponse::from($response);
+        return OperatorResponse::from($response);
     }
 
     /**

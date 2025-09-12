@@ -10,22 +10,15 @@ return new class extends Migration
     {
         Schema::create('tripay_products', function (Blueprint $table) {
             $table->id();
-            $table->string('product_id')->unique()->index();
-            $table->string('product_name');
+            $table->string('name');
+            $table->string('code');
+            $table->text('description')->nullable();
             $table->string('category_id')->index();
             $table->string('operator_id')->index();
-            $table->decimal('product_price', 15, 2)->default(0);
-            $table->decimal('selling_price', 15, 2)->default(0);
-            $table->decimal('profit_margin', 15, 2)->default(0);
-            $table->text('description')->nullable();
+           
+            $table->decimal('price', 15, 2)->default(0);
             $table->boolean('status')->default(true);
-            $table->enum('type', ['prepaid', 'postpaid'])->default('prepaid');
-            $table->string('denomination')->nullable();
-            $table->json('additional_info')->nullable();
-            $table->time('cut_off_start')->nullable();
-            $table->time('cut_off_end')->nullable();
-            $table->integer('sort_order')->default(0);
-            $table->boolean('is_featured')->default(false);
+            $table->enum('type', ['prepaid', 'postpaid'])->default('prepaid'); 
             $table->timestamp('synced_at')->nullable();
             $table->timestamps();
 
@@ -35,9 +28,7 @@ return new class extends Migration
             $table->index(['category_id', 'status']);
             $table->index(['operator_id', 'status']);
             $table->index(['type', 'status']);
-            $table->index('is_featured');
-            $table->index('sort_order');
-            $table->index('product_price');
+           
         });
     }
 
@@ -46,3 +37,4 @@ return new class extends Migration
         Schema::dropIfExists('tripay_products');
     }
 };
+

@@ -101,11 +101,13 @@ echo "Mode: " . env('TRIPAY_MODE', 'sandbox') . "\n";
 echo "API Key: " . (env('TRIPAY_API_KEY') ? substr(env('TRIPAY_API_KEY'), 0, 10) . '...' : 'NOT SET') . "\n\n";
 
 try {
+    
     echo "1. Testing Server Connection...\n";
     $isConnected = Tripay::testConnection();
     echo "   Connection Status: " . ($isConnected ? "✅ Connected" : "❌ Failed") . "\n\n";
     
     if ($isConnected) {
+        /*
         echo "2. Testing Server Health Check...\n";
         $serverResponse = Tripay::server()->checkServer();
         echo "   Server Response: " . ($serverResponse->success ? "✅ Success" : "❌ Failed") . "\n";
@@ -127,15 +129,17 @@ try {
         echo "   Transaction Service: " . (Tripay::transaction() ? "✅ Available" : "❌ Failed") . "\n\n";
         
         echo "5. Testing Prepaid Categories...\n";
+       
         try {
-            $categories = Tripay::prepaid()->getCategories();
+            $categories = Tripay::prepaid()->getCategories(); 
+            print_r($categories);
             echo "   Categories Status: " . ($categories->success ? "✅ Success" : "❌ Failed") . "\n";
             echo "   Total Categories: " . count($categories->data) . "\n";
             if (count($categories->data) > 0) {
                 echo "   Sample Categories: ";
                 $sampleCategories = array_slice($categories->data, 0, 3);
                 foreach ($sampleCategories as $i => $category) {
-                    echo ($i > 0 ? ", " : "") . $category->category_name;
+                    echo ($i > 0 ? ", " : "") . $category->name;
                 }
                 echo "\n";
             }
@@ -143,54 +147,35 @@ try {
         } catch (Exception $e) {
             echo "   Categories Error: " . $e->getMessage() . "\n\n";
         }
+        */
         
-        echo "6. Testing Prepaid Operators...\n";
-        try {
-            $operators = Tripay::prepaid()->getOperators();
-            echo "   Operators Status: " . ($operators->success ? "✅ Success" : "❌ Failed") . "\n";
-            echo "   Total Operators: " . count($operators->data) . "\n";
-            if (count($operators->data) > 0) {
-                echo "   Sample Operators: ";
-                $sampleOperators = array_slice($operators->data, 0, 3);
-                foreach ($sampleOperators as $i => $operator) {
-                    echo ($i > 0 ? ", " : "") . $operator->category_name;
-                }
-                echo "\n";
-            }
-            echo "\n";
-        } catch (Exception $e) {
-            echo "   Operators Error: " . $e->getMessage() . "\n\n";
-        }
+        // echo "6. Testing Prepaid Operators...\n";
+        // try {
+        //     $operators = Tripay::prepaid()->getOperators();
+        //     print_r($operators);
+        //     exit;
+        //     echo "   Operators Status: " . ($operators->success ? "✅ Success" : "❌ Failed") . "\n";
+        //     echo "   Total Operators: " . count($operators->data) . "\n";
+        //     if (count($operators->data) > 0) {
+        //         echo "   Sample Operators: ";
+        //         $sampleOperators = array_slice($operators->data, 0, 3);
+        //         foreach ($sampleOperators as $i => $operator) {
+        //             echo ($i > 0 ? ", " : "") . $operator->name;
+        //         }
+        //         echo "\n";
+        //     }
+        //     echo "\n";
+        // } catch (Exception $e) {
+        //     echo "   Operators Error: " . $e->getMessage() . "\n\n";
+        // }
         
         echo "7. Testing Prepaid Products List...\n";
         try {
             $products = Tripay::prepaid()->getProducts();
             echo "   Products Status: " . ($products->success ? "✅ Success" : "❌ Failed") . "\n";
             echo "   Total Products: " . count($products->data) . "\n";
+            print_r($products->data);
             
-            if (count($products->data) > 0) {
-                echo "   Sample Products:\n";
-                $sampleProducts = array_slice($products->data, 0, 5);
-                foreach ($sampleProducts as $product) {
-                    echo "     - " . $product->product_name . " (ID: " . $product->product_id . ", Price: Rp " . number_format($product->product_price) . ")\n";
-                }
-                
-                // Test getting products by category if we have categories
-                if (isset($categories) && count($categories->data) > 0) {
-                    $firstCategory = $categories->data[0]->category_id;
-                    echo "\n   Testing products by category (" . $categories->data[0]->category_name . ")...\n";
-                    $categoryProducts = Tripay::prepaid()->getProductsByCategory($firstCategory);
-                    echo "   Category Products: " . count($categoryProducts->data) . " found\n";
-                }
-                
-                // Test getting products by operator if we have operators
-                if (isset($operators) && count($operators->data) > 0) {
-                    $firstOperator = $operators->data[0]->category_id;
-                    echo "\n   Testing products by operator (" . $operators->data[0]->category_name . ")...\n";
-                    $operatorProducts = Tripay::prepaid()->getProductsByOperator($firstOperator);
-                    echo "   Operator Products: " . count($operatorProducts->data) . " found\n";
-                }
-            }
             echo "\n";
         } catch (Exception $e) {
             echo "   Products Error: " . $e->getMessage() . "\n\n";

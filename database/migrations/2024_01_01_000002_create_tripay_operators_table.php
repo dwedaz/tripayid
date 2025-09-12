@@ -10,20 +10,19 @@ return new class extends Migration
     {
         Schema::create('tripay_operators', function (Blueprint $table) {
             $table->id();
-            $table->string('operator_id')->unique()->index();
-            $table->string('operator_name');
-            $table->string('operator_code')->nullable();
-            $table->text('description')->nullable();
+            $table->string('code')->unique()->index();
+            $table->string('name')->nullable();
             $table->boolean('status')->default(true);
-            $table->enum('type', ['prepaid', 'postpaid'])->default('prepaid');
-            $table->string('logo_url')->nullable();
-            $table->integer('sort_order')->default(0);
+            $table->string('category_id')->index();
+
+            $table->enum('billing_type', ['prepaid', 'postpaid'])->default('prepaid');
+          
             $table->timestamp('synced_at')->nullable();
             $table->timestamps();
 
+            $table->foreign('category_id')->references('category_id')->on('tripay_categories')->onDelete('cascade');
+
             $table->index(['type', 'status']);
-            $table->index('sort_order');
-            $table->index('operator_code');
         });
     }
 

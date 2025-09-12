@@ -6,11 +6,12 @@ use Tripay\PPOB\DTO\DataTransferObject;
 
 class ProductData extends DataTransferObject
 {
-    public readonly string $product_id;
-    public readonly string $product_name;
-    public readonly ?string $category;
-    public readonly ?string $operator;
-    public readonly ?float $product_price;
+    public readonly string $id;
+    public readonly string $name;
+    public readonly ?string $code;
+    public readonly ?string $category_id;
+    public readonly ?string $operator_id;
+    public readonly ?float $price;
     public readonly ?float $selling_price;
     public readonly ?string $description;
     public readonly ?bool $status;
@@ -18,17 +19,18 @@ class ProductData extends DataTransferObject
     
     public function __construct(array $data = [])
     {
-        $this->product_id = $data['product_id'] ?? '';
-        $this->product_name = $data['product_name'] ?? '';
-        $this->category = $data['category'] ?? null;
-        $this->operator = $data['operator'] ?? null;
-        $this->product_price = isset($data['product_price']) ? (float)$data['product_price'] : (isset($data['price']) ? (float)$data['price'] : null);
-        $this->selling_price = isset($data['selling_price']) ? (float)$data['selling_price'] : null;
-        $this->description = $data['description'] ?? null;
+        $this->id = $data['product_id'] ?? '';
+        $this->name = $data['product_name'] ?? '';
+        $this->code = $data['product_id'] ?? null;
+        $this->category_id = $data['pembeliankategori_id'] ?? null;
+        $this->operator_id = $data['pembelianoperator_id'] ?? null;
+        $this->price = isset($data['price']) ? (float)$data['price'] : null;
+        $this->description = $data['desc'] ?? null;
         $this->status = isset($data['status']) ? (bool)$data['status'] : null;
-        $this->type = $data['type'] ?? null;
     }
 }
+
+
 
 class ProductDetailData extends ProductData
 {

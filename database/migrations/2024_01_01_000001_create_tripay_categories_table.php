@@ -10,11 +10,9 @@ return new class extends Migration
     {
         Schema::create('tripay_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('category_id')->unique()->index();
-            $table->string('category_name');
-            $table->text('description')->nullable();
-            $table->boolean('status')->default(true);
-            $table->enum('type', ['prepaid', 'postpaid'])->default('prepaid');
+            $table->string('name');
+            $table->text('type')->nullable();
+            $table->enum('billing_type', ['prepaid', 'postpaid'])->default('prepaid');
             $table->integer('sort_order')->default(0);
             $table->timestamp('synced_at')->nullable();
             $table->timestamps();

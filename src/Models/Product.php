@@ -16,32 +16,21 @@ class Product extends Model
     protected $table = 'tripay_products';
 
     protected $fillable = [
-        'product_id',
-        'product_name',
+        'id',
+        'name',
+        'code',
+        'description',
         'category_id',
         'operator_id',
-        'product_price',
-        'selling_price',
-        'profit_margin',
-        'description',
+        'price',
         'status',
-        'type', // prepaid or postpaid
-        'denomination',
-        'additional_info',
-        'cut_off_start',
-        'cut_off_end',
-        'sort_order',
-        'is_featured',
+        'type',
         'synced_at',
     ];
 
     protected $casts = [
-        'product_price' => 'decimal:2',
-        'selling_price' => 'decimal:2',
-        'profit_margin' => 'decimal:2',
+        'price' => 'decimal:2',
         'status' => 'boolean',
-        'is_featured' => 'boolean',
-        'additional_info' => 'array',
         'synced_at' => 'datetime',
     ];
 
