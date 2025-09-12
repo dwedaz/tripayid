@@ -47,11 +47,22 @@ class DashboardController extends Controller
 
             $syncedCount = 0;
             foreach ($response->data as $categoryData) {
+                // Generate category_id from category_name if not provided by API
+                $categoryId = $categoryData->category_id ?? $categoryData->id;
+                if (empty($categoryId)) {
+                    // Create ID from category name (slugified)
+                    $categoryId = strtolower(str_replace([' ', '-', '_'], '', preg_replace('/[^A-Za-z0-9\s\-_]/', '', $categoryData->category_name ?? $categoryData->name ?? 'unknown')));
+                }
+                
                 Category::updateOrCreate(
-                    ['category_id' => $categoryData->category_id],
+                    ['category_id' => $categoryId],
                     [
-                        'category_name' => $categoryData->category_name,
-                        'is_active' => $categoryData->is_active ?? true,
+                        'category_name' => $categoryData->category_name ?? $categoryData->name,
+                        'description' => $categoryData->description ?? null,
+                        'status' => $categoryData->status ?? $categoryData->is_active ?? true,
+                        'type' => $categoryData->type ?? 'prepaid',
+                        'sort_order' => $categoryData->sort_order ?? 0,
+                        'synced_at' => now(),
                     ]
                 );
                 $syncedCount++;
@@ -83,11 +94,22 @@ class DashboardController extends Controller
 
             $syncedCount = 0;
             foreach ($response->data as $operatorData) {
+                // In Tripay API, operators use 'category_id' as operator_id and 'category_name' as operator_name
+                $operatorId = $operatorData->category_id ?? $operatorData->operator_id ?? $operatorData->code ?? $operatorData->id;
+                $operatorName = $operatorData->category_name ?? $operatorData->operator_name ?? $operatorData->name;
+                $operatorCode = $operatorData->category_id ?? $operatorData->operator_code ?? $operatorData->code ?? null;
+                
                 Operator::updateOrCreate(
-                    ['category_id' => $operatorData->category_id],
+                    ['operator_id' => $operatorId],
                     [
-                        'category_name' => $operatorData->category_name,
-                        'is_active' => $operatorData->is_active ?? true,
+                        'operator_name' => $operatorName,
+                        'operator_code' => $operatorCode,
+                        'description' => $operatorData->description ?? null,
+                        'status' => $operatorData->status ?? $operatorData->is_active ?? true,
+                        'type' => $operatorData->type ?? 'prepaid',
+                        'logo_url' => $operatorData->logo_url ?? $operatorData->logo ?? null,
+                        'sort_order' => $operatorData->sort_order ?? 0,
+                        'synced_at' => now(),
                     ]
                 );
                 $syncedCount++;
@@ -120,14 +142,24 @@ class DashboardController extends Controller
             $syncedCount = 0;
             foreach ($response->data as $productData) {
                 Product::updateOrCreate(
-                    ['product_id' => $productData->product_id],
+                    ['product_id' => $productData->product_id ?? $productData->id],
                     [
-                        'product_name' => $productData->product_name,
+                        'product_name' => $productData->product_name ?? $productData->name,
                         'category_id' => $productData->category_id,
-                        'operator_id' => $productData->operator_id ?? null,
-                        'product_price' => $productData->product_price,
-                        'is_active' => $productData->is_active ?? true,
-                        'product_description' => $productData->product_description ?? null,
+                        'operator_id' => $productData->operator_id,
+                        'product_price' => $productData->product_price ?? $productData->price ?? 0,
+                        'selling_price' => $productData->selling_price ?? $productData->product_price ?? $productData->price ?? 0,
+                        'profit_margin' => $productData->profit_margin ?? 0,
+                        'description' => $productData->description ?? $productData->product_description ?? null,
+                        'status' => $productData->status ?? $productData->is_active ?? true,
+                        'type' => $productData->type ?? 'prepaid',
+                        'denomination' => $productData->denomination ?? null,
+                        'additional_info' => isset($productData->additional_info) ? json_encode($productData->additional_info) : null,
+                        'cut_off_start' => $productData->cut_off_start ?? null,
+                        'cut_off_end' => $productData->cut_off_end ?? null,
+                        'sort_order' => $productData->sort_order ?? 0,
+                        'is_featured' => $productData->is_featured ?? false,
+                        'synced_at' => now(),
                     ]
                 );
                 $syncedCount++;
