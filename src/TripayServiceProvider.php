@@ -38,6 +38,7 @@ class TripayServiceProvider extends ServiceProvider
         $this->loadMigrations();
         $this->registerRoutes();
         $this->registerMiddleware();
+        $this->registerBackpackIntegration();
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -149,6 +150,70 @@ class TripayServiceProvider extends ServiceProvider
     {
         $router = $this->app['router'];
         $router->aliasMiddleware('tripay.signature', VerifyTripaySignature::class);
+    }
+
+    /**
+     * Register Backpack integration.
+     */
+    protected function registerBackpackIntegration(): void
+    {
+        if (config('tripay.backpack.enabled', true) && class_exists('\Backpack\CRUD\BackpackServiceProvider')) {
+            $this->loadBackpackRoutes();
+            $this->loadBackpackViews();
+            $this->registerBackpackMenu();
+        }
+    }
+
+    /**
+     * Load Backpack routes.
+     */
+    protected function loadBackpackRoutes(): void
+    {
+        $this->loadRoutesFrom(__DIR__.'/../routes/backpack.php');
+    }
+
+    /**
+     * Load Backpack views.
+     */
+    protected function loadBackpackViews(): void
+    {
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'tripay');
+    }
+
+    /**
+     * Register Backpack sidebar menu.
+     */
+    protected function registerBackpackMenu(): void
+    {
+        // Add the menu item to Backpack's sidebar
+        if (config('tripay.backpack.menu.enabled', true)) {
+            $this->app->booted(function () {
+                if (method_exists('\Backpack\CRUD\app\Library\Widget', 'add')) {
+                    // Register the sidebar menu using Backpack's widget system
+                    \Backpack\CRUD\app\Library\Widget::add([
+                        'type' => 'script',
+                        'content' => '
+                        <script>
+                            // Add Tripay menu to sidebar
+                            if (typeof window.backpack !== "undefined") {
+                                window.backpack.addSidebarItem({
+                                    title: "' . config('tripay.backpack.menu.title', 'Tripay PPOB') . '",
+                                    icon: "' . config('tripay.backpack.menu.icon', 'la la-money-bill') . '",
+                                    url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay') . '",
+                                    children: [
+                                        { title: "Dashboard", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay') . '" },
+                                        { title: "Categories", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay/categories') . '" },
+                                        { title: "Operators", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay/operators') . '" },
+                                        { title: "Products", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay/products') . '" },
+                                        { title: "Transactions", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay/transactions') . '" },
+                                    ]
+                                });
+                            }
+                        </script>'
+                    ]);
+                }
+            });
+        }
     }
 
     /**

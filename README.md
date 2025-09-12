@@ -1,32 +1,81 @@
-# Laravel Tripay PPOB Package
+# Laravel Tripay PPOB with Backpack Admin
 
 [![Latest Version](https://img.shields.io/packagist/v/dwedaz/tripayid.svg?style=flat-square)](https://packagist.org/packages/dwedaz/tripayid)
+[![Total Downloads](https://img.shields.io/packagist/dt/dwedaz/tripayid.svg?style=flat-square)](https://packagist.org/packages/dwedaz/tripayid)
 [![MIT Licensed](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Tests](https://img.shields.io/github/workflow/status/dwedaz/tripayid/Tests?label=tests&style=flat-square)](https://github.com/dwedaz/tripayid/actions)
+[![Tests](https://img.shields.io/github/actions/workflow/status/dwedaz/tripayid/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/dwedaz/tripayid/actions)
+[![Laravel](https://img.shields.io/badge/Laravel-10%2B-red.svg?style=flat-square)](https://laravel.com)
+[![Backpack](https://img.shields.io/badge/Backpack-6.0%2B-blue.svg?style=flat-square)](https://backpackforlaravel.com)
 
-A comprehensive Laravel package for integrating **Tripay.id PPOB (Payment Point Online Bank)** services into your Laravel applications. This package provides a clean, type-safe API for handling both **prepaid** (pulsa, data, e-money) and **postpaid** (bill payments like PLN, PDAM, TV, etc.) transactions.
+A comprehensive Laravel package for integrating **Tripay.id PPOB (Payment Point Online Bank)** services with a beautiful **Backpack admin panel**. This package provides a clean, type-safe API for handling both **prepaid** (pulsa, data, e-money) and **postpaid** (bill payments like PLN, PDAM, TV, etc.) transactions, complete with a professional admin dashboard for managing your PPOB business.
 
-## Features
+## 🎆 Features
 
-✨ **Complete API Coverage**: Full integration with Tripay.id PPOB API endpoints  
-🔒 **Type Safety**: Strongly typed DTOs with PHP 8.1+ readonly properties  
-⚡ **Caching**: Built-in caching for product catalogs and categories  
-🚀 **Laravel Integration**: Service provider, facades, and Artisan commands  
-🎯 **Error Handling**: Comprehensive exception handling with detailed error messages  
-📊 **Logging**: Configurable request/response logging  
-🔄 **Retry Logic**: Automatic retry with exponential backoff  
-🔐 **Webhook Security**: HMAC signature verification for callbacks  
-💼 **Backpack Compatible**: Ready-to-use CRUD interfaces  
+### 📊 Admin Panel (Backpack Integration)
+- **🎨 Beautiful Dashboard** - Real-time statistics, balance monitoring, and transaction overview
+- **🗂 Categories Management** - CRUD interface for managing product categories
+- **🏢 Operators Management** - Manage telecom operators with logos and status
+- **📦 Products Catalog** - Complete product management with pricing and profit calculations
+- **📈 Transaction Monitor** - View, filter, and analyze all transactions
+- **🔄 One-Click Sync** - Synchronize data from Tripay API with one click
+- **📱 Responsive Design** - Works perfectly on desktop and mobile devices
+- **🔍 Advanced Filtering** - Filter by category, operator, status, date range, and more
+
+### ⚡ Core API Features  
+- **✨ Complete API Coverage** - Full integration with Tripay.id PPOB API endpoints
+- **🔒 Type Safety** - Strongly typed DTOs with PHP 8.1+ readonly properties
+- **⚡ High Performance** - Built-in caching for product catalogs and categories
+- **🚀 Laravel Integration** - Service provider, facades, and Artisan commands
+- **🎯 Error Handling** - Comprehensive exception handling with detailed error messages
+- **📈 Logging** - Configurable request/response logging
+- **🔄 Retry Logic** - Automatic retry with exponential backoff
+- **🔐 Webhook Security** - HMAC signature verification for callbacks
 
 ## Requirements
 
 - PHP 8.1+
 - Laravel 10.0+
+```
+
+## 🎨 Backpack Admin Panel
+
+### Installation with Backpack
+
+This package includes a beautiful admin panel built with Backpack CRUD. To use the admin interface:
+
+1. Install Backpack (if not already installed):
+```bash
+composer require backpack/crud
+php artisan backpack:install
+```
+
+2. Run migrations to create the admin tables:
+```bash
+php artisan migrate
+```
+
+3. Access the admin panel:
+- **Dashboard**: `https://yourapp.com/admin/tripay`
+- **Categories**: `https://yourapp.com/admin/tripay/categories`
+- **Operators**: `https://yourapp.com/admin/tripay/operators`
+- **Products**: `https://yourapp.com/admin/tripay/products`
+- **Transactions**: `https://yourapp.com/admin/tripay/transactions`
+
+### Admin Features
+
+- 📊 **Real-time Dashboard** - Live balance, transaction counts, and quick actions
+- 🗂 **Category Management** - Add, edit, and organize product categories
+- 🏢 **Operator Management** - Manage telecom operators with logos and status
+- 📦 **Product Catalog** - Complete product management with pricing and profit tracking
+- 📈 **Transaction Monitor** - Filter and analyze all transactions with advanced search
+- 🔄 **One-Click Sync** - Sync all data from Tripay API with a single button
+- 📱 **Responsive Design** - Fully responsive interface for mobile and desktop
+
+![Tripay Admin Dashboard](https://via.placeholder.com/800x400/4f46e5/ffffff?text=Tripay+Admin+Dashboard)
 
 ## Installation
 
 Install the package via Composer:
-
 ```bash
 composer require dwedaz/tripayid
 ```

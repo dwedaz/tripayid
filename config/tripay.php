@@ -133,12 +133,27 @@ return [
     | Backpack Integration
     |--------------------------------------------------------------------------
     |
-    | Configure Backpack CRUD integration for admin panel.
+    | Configure Backpack admin panel integration
     |
     */
     'backpack' => [
-        'enabled' => env('TRIPAY_BACKPACK_ENABLED', false),
-        'prefix' => env('TRIPAY_BACKPACK_PREFIX', 'admin'),
+        'enabled' => env('TRIPAY_BACKPACK_ENABLED', true),
+        'prefix' => 'admin',
         'middleware' => ['web', 'admin'],
+        'menu' => [
+            'enabled' => true,
+            'position' => 'sidebar-after-user',
+            'icon' => 'la la-money-bill',
+            'title' => 'Tripay PPOB',
+        ],
+        'dashboard' => [
+            'enabled' => true,
+            'widgets' => [
+                'balance' => true,
+                'recent_transactions' => true,
+                'popular_products' => true,
+                'system_health' => true,
+            ],
+        ],
     ],
 ];
