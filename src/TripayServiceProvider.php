@@ -185,35 +185,10 @@ class TripayServiceProvider extends ServiceProvider
      */
     protected function registerBackpackMenu(): void
     {
-        // Add the menu item to Backpack's sidebar
-        if (config('tripay.backpack.menu.enabled', true)) {
-            $this->app->booted(function () {
-                if (method_exists('\Backpack\CRUD\app\Library\Widget', 'add')) {
-                    // Register the sidebar menu using Backpack's widget system
-                    \Backpack\CRUD\app\Library\Widget::add([
-                        'type' => 'script',
-                        'content' => '
-                        <script>
-                            // Add Tripay menu to sidebar
-                            if (typeof window.backpack !== "undefined") {
-                                window.backpack.addSidebarItem({
-                                    title: "' . config('tripay.backpack.menu.title', 'Tripay PPOB') . '",
-                                    icon: "' . config('tripay.backpack.menu.icon', 'la la-money-bill') . '",
-                                    url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay') . '",
-                                    children: [
-                                        { title: "Dashboard", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay') . '" },
-                                        { title: "Categories", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay/categories') . '" },
-                                        { title: "Operators", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay/operators') . '" },
-                                        { title: "Products", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay/products') . '" },
-                                        { title: "Transactions", url: "' . url(config('backpack.base.route_prefix', 'admin') . '/tripay/transactions') . '" },
-                                    ]
-                                });
-                            }
-                        </script>'
-                    ]);
-                }
-            });
-        }
+        // For now, disable automatic menu registration to avoid JavaScript issues
+        // Users can manually add the menu items to their Backpack configuration
+        // TODO: Implement a more robust menu registration system
+        return;
     }
 
     /**
