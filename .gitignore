@@ -70,3 +70,4 @@ tests/output/
 # Build files
 build/
 dist/
+.php-cs-fixer.cache
