@@ -141,7 +141,7 @@ return [
         'prefix' => 'admin',
         'middleware' => ['web', 'admin'],
         'menu' => [
-            'enabled' => false,
+            'enabled' => true,
             'position' => 'sidebar-after-user',
             'icon' => 'la la-money-bill',
             'title' => 'Tripay PPOB',
