@@ -23,7 +23,6 @@ Route::group([
         (array) config('backpack.base.web_middleware', 'web'),
         (array) config('backpack.base.middleware_key', 'admin')
     ),
-    'namespace' => 'Tripay\PPOB\Http\Controllers\Admin',
 ], function () {
     
     // Tripay Dashboard
@@ -43,35 +42,21 @@ Route::group([
     // Transactions CRUD routes (read-only)
     Route::crud('tripay/transactions', TransactionCrudController::class);
 
-    // Sync and management routes
+    // Sync and management routes (these will be implemented later)
     Route::group(['prefix' => 'tripay'], function () {
         
-        // Sync routes
-        Route::post('sync/categories', 'SyncController@syncCategories')->name('tripay.sync.categories');
-        Route::post('sync/operators', 'SyncController@syncOperators')->name('tripay.sync.operators');  
-        Route::post('sync/products', 'SyncController@syncProducts')->name('tripay.sync.products');
-        Route::post('sync/all', 'SyncController@syncAll')->name('tripay.sync.all');
+        // Sync routes - these will need to be implemented
+        // Route::post('sync/categories', [SyncController::class, 'syncCategories'])->name('tripay.sync.categories');
+        // Route::post('sync/operators', [SyncController::class, 'syncOperators'])->name('tripay.sync.operators');  
+        // Route::post('sync/products', [SyncController::class, 'syncProducts'])->name('tripay.sync.products');
+        // Route::post('sync/all', [SyncController::class, 'syncAll'])->name('tripay.sync.all');
         
-        // Balance check
-        Route::get('balance', 'DashboardController@balance')->name('tripay.balance');
+        // Balance check - will be implemented
+        // Route::get('balance', [DashboardController::class, 'balance'])->name('tripay.balance');
         
-        // Transaction management
-        Route::post('transactions/{transaction}/retry', 'TransactionController@retry')->name('tripay.transactions.retry');
-        Route::post('transactions/{transaction}/cancel', 'TransactionController@cancel')->name('tripay.transactions.cancel');
-        
-        // Reports
-        Route::get('reports', 'ReportController@index')->name('tripay.reports');
-        Route::get('reports/export', 'ReportController@export')->name('tripay.reports.export');
-        
-        // Settings
-        Route::get('settings', 'SettingsController@index')->name('tripay.settings');
-        Route::post('settings', 'SettingsController@update')->name('tripay.settings.update');
-        
-        // Health check
-        Route::get('health', 'HealthController@check')->name('tripay.health.check');
-        
-        // Cache management
-        Route::post('cache/clear', 'CacheController@clear')->name('tripay.cache.clear');
-        Route::post('cache/warm', 'CacheController@warm')->name('tripay.cache.warm');
+        // For now, let's add a simple test route
+        Route::get('test', function() {
+            return response()->json(['message' => 'Tripay admin routes working!', 'time' => now()]);
+        })->name('tripay.test');
     });
 });
