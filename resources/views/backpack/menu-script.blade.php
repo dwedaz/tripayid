@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Only add menu if not already present
     if (document.querySelector('[data-tripay-menu]')) return;
     
-    // Find the sidebar nav
-    const nav = document.querySelector('.sidebar nav ul, .sidebar-menu, .nav.nav-pills.flex-column, .main-sidebar .nav');
-    if (!nav) return;
+    // Find the sidebar nav (multiple selectors for different themes)
+    const nav = document.querySelector('.sidebar nav ul, .sidebar-menu, .nav.nav-pills.flex-column, .main-sidebar .nav, .navbar-nav, .sidebar .nav, .nav-pills');
+    if (!nav) {
+        console.log('Tripay: Could not find sidebar navigation');
+        return;
+    }
     
     // Create menu HTML
     const menuItem = document.createElement('li');

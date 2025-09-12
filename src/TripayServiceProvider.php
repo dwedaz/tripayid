@@ -187,14 +187,14 @@ class TripayServiceProvider extends ServiceProvider
     {
         // Add the menu item to Backpack's sidebar automatically when package is installed
         if (config('tripay.backpack.menu.enabled', true)) {
-            // Use Laravel's View composer to inject menu via Blade view
-            $this->app->booted(function () {
-                // Check if we're in a Backpack context
+            // Use View Composer to inject menu into Backpack layouts
+            view()->composer('backpack.*', function ($view) {
                 if (class_exists('\Backpack\CRUD\app\Library\Widget')) {
-                    // Add widget using a Blade view to avoid Basset conflicts
+                    // Add the widget to inject our menu
                     \Backpack\CRUD\app\Library\Widget::add([
                         'type' => 'view',
-                        'view' => 'tripay::backpack.menu-script'
+                        'view' => 'tripay::backpack.menu-script',
+                        'stack' => 'after_scripts'
                     ]);
                 }
             });
