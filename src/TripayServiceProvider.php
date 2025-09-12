@@ -198,9 +198,38 @@ class TripayServiceProvider extends ServiceProvider
                     ]);
                 }
             });
+            
+            // Also try to auto-add to menu_items.blade.php if it doesn't exist
+            $this->autoAddToBackpackMenu();
         }
     }
 
+
+    /**
+     * Automatically add Tripay menu to Backpack's menu_items.blade.php if not present.
+     */
+    protected function autoAddToBackpackMenu(): void
+    {
+        $menuFile = resource_path('views/vendor/backpack/ui/inc/menu_items.blade.php');
+        
+        if (file_exists($menuFile)) {
+            $content = file_get_contents($menuFile);
+            
+            // Check if Tripay menu is not already added
+            if (strpos($content, 'Tripay PPOB') === false && strpos($content, 'tripay') === false) {
+                $menuContent = '
+<x-backpack::menu-dropdown title="Tripay PPOB" icon="la la-money-bill">
+    <x-backpack::menu-dropdown-item title="Dashboard" icon="la la-tachometer" :link="backpack_url(\'tripay\')" />
+    <x-backpack::menu-dropdown-item title="Categories" icon="la la-tags" :link="backpack_url(\'tripay/categories\')" />
+    <x-backpack::menu-dropdown-item title="Operators" icon="la la-signal" :link="backpack_url(\'tripay/operators\')" />
+    <x-backpack::menu-dropdown-item title="Products" icon="la la-box" :link="backpack_url(\'tripay/products\')" />
+    <x-backpack::menu-dropdown-item title="Transactions" icon="la la-exchange-alt" :link="backpack_url(\'tripay/transactions\')" />
+</x-backpack::menu-dropdown>';
+                
+                file_put_contents($menuFile, $content . $menuContent);
+            }
+        }
+    }
 
     /**
      * Get the services provided by the provider.
