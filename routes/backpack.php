@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Tripay\PPOB\Http\Controllers\Admin\CategoryCrudController;
+use Tripay\PPOB\Http\Controllers\Admin\DashboardController;
 use Tripay\PPOB\Http\Controllers\Admin\OperatorCrudController;
 use Tripay\PPOB\Http\Controllers\Admin\ProductCrudController;
 use Tripay\PPOB\Http\Controllers\Admin\TransactionCrudController;
@@ -42,19 +43,25 @@ Route::group([
     // Transactions CRUD routes (read-only)
     Route::crud('tripay/transactions', TransactionCrudController::class);
 
-    // Sync and management routes (these will be implemented later)
+    // Dashboard and management routes
     Route::group(['prefix' => 'tripay'], function () {
         
-        // Sync routes - these will need to be implemented
-        // Route::post('sync/categories', [SyncController::class, 'syncCategories'])->name('tripay.sync.categories');
-        // Route::post('sync/operators', [SyncController::class, 'syncOperators'])->name('tripay.sync.operators');  
-        // Route::post('sync/products', [SyncController::class, 'syncProducts'])->name('tripay.sync.products');
-        // Route::post('sync/all', [SyncController::class, 'syncAll'])->name('tripay.sync.all');
+        // Balance check
+        Route::get('balance', [DashboardController::class, 'balance'])->name('tripay.balance');
         
-        // Balance check - will be implemented
-        // Route::get('balance', [DashboardController::class, 'balance'])->name('tripay.balance');
+        // Sync routes
+        Route::post('sync/categories', [DashboardController::class, 'syncCategories'])->name('tripay.sync.categories');
+        Route::post('sync/operators', [DashboardController::class, 'syncOperators'])->name('tripay.sync.operators');  
+        Route::post('sync/products', [DashboardController::class, 'syncProducts'])->name('tripay.sync.products');
+        Route::post('sync/all', [DashboardController::class, 'syncAll'])->name('tripay.sync.all');
         
-        // For now, let's add a simple test route
+        // Cache management
+        Route::post('cache/clear', [DashboardController::class, 'clearCache'])->name('tripay.cache.clear');
+        
+        // Health check
+        Route::get('health', [DashboardController::class, 'healthCheck'])->name('tripay.health');
+        
+        // Test route
         Route::get('test', function() {
             return response()->json(['message' => 'Tripay admin routes working!', 'time' => now()]);
         })->name('tripay.test');
