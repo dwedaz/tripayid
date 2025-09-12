@@ -2,8 +2,8 @@
 
 namespace Tripay\PPOB\Services;
 
-use Tripay\PPOB\DTO\Response\TransactionHistoryResponse;
 use Tripay\PPOB\DTO\Response\TransactionDetailResponse;
+use Tripay\PPOB\DTO\Response\TransactionHistoryResponse;
 
 class TransactionService extends BaseService
 {
@@ -13,6 +13,7 @@ class TransactionService extends BaseService
     public function getHistory(): TransactionHistoryResponse
     {
         $response = $this->client->get($this->getEndpoint('history'));
+
         return TransactionHistoryResponse::from($response);
     }
 
@@ -27,6 +28,7 @@ class TransactionService extends BaseService
         ]);
 
         $response = $this->client->get($this->getEndpoint('history_by_date'), $params);
+
         return TransactionHistoryResponse::from($response);
     }
 
@@ -37,6 +39,7 @@ class TransactionService extends BaseService
     {
         $params = ['api_trxid' => $apiTrxId];
         $response = $this->client->post($this->getEndpoint('detail'), $params);
+
         return TransactionDetailResponse::from($response);
     }
 
@@ -47,6 +50,7 @@ class TransactionService extends BaseService
     {
         $params = ['trxid' => $trxId];
         $response = $this->client->post($this->getEndpoint('detail'), $params);
+
         return TransactionDetailResponse::from($response);
     }
 
@@ -56,6 +60,7 @@ class TransactionService extends BaseService
     public function getCachedHistory(int $ttl = 300): TransactionHistoryResponse
     {
         $response = $this->getCachedData('transaction_history', $this->getEndpoint('history'), [], $ttl);
+
         return TransactionHistoryResponse::from($response);
     }
 
@@ -65,6 +70,7 @@ class TransactionService extends BaseService
     public function getTodayTransactions(): TransactionHistoryResponse
     {
         $today = date('Y-m-d');
+
         return $this->getHistoryByDate($today, $today);
     }
 
@@ -75,6 +81,7 @@ class TransactionService extends BaseService
     {
         $firstDay = date('Y-m-01');
         $lastDay = date('Y-m-t');
+
         return $this->getHistoryByDate($firstDay, $lastDay);
     }
 
@@ -84,7 +91,7 @@ class TransactionService extends BaseService
     public function getPendingTransactions(): TransactionHistoryResponse
     {
         $allTransactions = $this->getHistory();
-        
+
         // Filter for pending status
         $pendingTransactions = array_filter($allTransactions->data, function ($transaction) {
             return strtolower($transaction->status) === 'pending';
@@ -93,7 +100,7 @@ class TransactionService extends BaseService
         return TransactionHistoryResponse::from([
             'success' => $allTransactions->success,
             'message' => $allTransactions->message,
-            'data' => array_values($pendingTransactions)
+            'data' => array_values($pendingTransactions),
         ]);
     }
 
@@ -103,7 +110,7 @@ class TransactionService extends BaseService
     public function getSuccessfulTransactions(): TransactionHistoryResponse
     {
         $allTransactions = $this->getHistory();
-        
+
         // Filter for success status
         $successTransactions = array_filter($allTransactions->data, function ($transaction) {
             return strtolower($transaction->status) === 'success';
@@ -112,7 +119,7 @@ class TransactionService extends BaseService
         return TransactionHistoryResponse::from([
             'success' => $allTransactions->success,
             'message' => $allTransactions->message,
-            'data' => array_values($successTransactions)
+            'data' => array_values($successTransactions),
         ]);
     }
 
@@ -122,7 +129,7 @@ class TransactionService extends BaseService
     public function getFailedTransactions(): TransactionHistoryResponse
     {
         $allTransactions = $this->getHistory();
-        
+
         // Filter for failed status
         $failedTransactions = array_filter($allTransactions->data, function ($transaction) {
             return in_array(strtolower($transaction->status), ['failed', 'error', 'gagal']);
@@ -131,7 +138,7 @@ class TransactionService extends BaseService
         return TransactionHistoryResponse::from([
             'success' => $allTransactions->success,
             'message' => $allTransactions->message,
-            'data' => array_values($failedTransactions)
+            'data' => array_values($failedTransactions),
         ]);
     }
 
@@ -141,7 +148,7 @@ class TransactionService extends BaseService
     public function searchTransactions(string $search): TransactionHistoryResponse
     {
         $allTransactions = $this->getHistory();
-        
+
         // Filter transactions by search term
         $filteredTransactions = array_filter($allTransactions->data, function ($transaction) use ($search) {
             return stripos($transaction->product_name, $search) !== false ||
@@ -151,7 +158,7 @@ class TransactionService extends BaseService
         return TransactionHistoryResponse::from([
             'success' => $allTransactions->success,
             'message' => $allTransactions->message,
-            'data' => array_values($filteredTransactions)
+            'data' => array_values($filteredTransactions),
         ]);
     }
 

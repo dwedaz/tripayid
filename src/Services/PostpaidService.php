@@ -2,13 +2,13 @@
 
 namespace Tripay\PPOB\Services;
 
-use Tripay\PPOB\DTO\Response\CategoryResponse;
-use Tripay\PPOB\DTO\Response\ProductResponse;
-use Tripay\PPOB\DTO\Response\ProductDetailResponse;
-use Tripay\PPOB\DTO\Response\BillCheckResponse;
-use Tripay\PPOB\DTO\Response\TransactionResponse;
 use Tripay\PPOB\DTO\Request\BillCheckRequest;
 use Tripay\PPOB\DTO\Request\BillPaymentRequest;
+use Tripay\PPOB\DTO\Response\BillCheckResponse;
+use Tripay\PPOB\DTO\Response\CategoryResponse;
+use Tripay\PPOB\DTO\Response\ProductDetailResponse;
+use Tripay\PPOB\DTO\Response\ProductResponse;
+use Tripay\PPOB\DTO\Response\TransactionResponse;
 
 class PostpaidService extends BaseService
 {
@@ -18,6 +18,7 @@ class PostpaidService extends BaseService
     public function getCategories(): CategoryResponse
     {
         $response = $this->getCachedData('postpaid_categories', $this->getEndpoint('categories'));
+
         return CategoryResponse::from($response);
     }
 
@@ -27,6 +28,7 @@ class PostpaidService extends BaseService
     public function getOperators(): CategoryResponse
     {
         $response = $this->getCachedData('postpaid_operators', $this->getEndpoint('operators'));
+
         return CategoryResponse::from($response);
     }
 
@@ -42,7 +44,7 @@ class PostpaidService extends BaseService
 
         $cacheKey = 'postpaid_products_' . md5(serialize($params));
         $response = $this->getCachedData($cacheKey, $this->getEndpoint('products'), $params);
-        
+
         return ProductResponse::from($response);
     }
 
@@ -53,8 +55,9 @@ class PostpaidService extends BaseService
     {
         $params = ['product' => $productId];
         $cacheKey = 'postpaid_product_detail_' . $productId;
-        
+
         $response = $this->getCachedData($cacheKey, $this->getEndpoint('product_detail'), $params);
+
         return ProductDetailResponse::from($response);
     }
 
@@ -64,6 +67,7 @@ class PostpaidService extends BaseService
     public function checkBill(BillCheckRequest $request): BillCheckResponse
     {
         $response = $this->client->post($this->getEndpoint('check_bill'), $request->toArray());
+
         return BillCheckResponse::from($response);
     }
 
@@ -78,6 +82,7 @@ class PostpaidService extends BaseService
         ?string $apiTrxId = null
     ): BillCheckResponse {
         $request = BillCheckRequest::create($productId, $phoneNumber, $customerNumber, $pin, $apiTrxId);
+
         return $this->checkBill($request);
     }
 
@@ -87,6 +92,7 @@ class PostpaidService extends BaseService
     public function payBill(BillPaymentRequest $request): TransactionResponse
     {
         $response = $this->client->post($this->getEndpoint('pay_bill'), $request->toArray());
+
         return TransactionResponse::from($response);
     }
 
@@ -99,6 +105,7 @@ class PostpaidService extends BaseService
         string $pin
     ): TransactionResponse {
         $request = BillPaymentRequest::create($trxId, $apiTrxId, $pin);
+
         return $this->payBill($request);
     }
 
@@ -115,8 +122,8 @@ class PostpaidService extends BaseService
     ): BillCheckResponse|TransactionResponse {
         // First check the bill
         $billCheck = $this->checkBillByParams($productId, $phoneNumber, $customerNumber, $pin, $apiTrxId);
-        
-        if (!$billCheck->success || !$autoPay) {
+
+        if (! $billCheck->success || ! $autoPay) {
             return $billCheck;
         }
 
@@ -150,7 +157,7 @@ class PostpaidService extends BaseService
     public function searchProducts(string $search): ProductResponse
     {
         $allProducts = $this->getProducts();
-        
+
         // Filter products by search term
         $filteredProducts = array_filter($allProducts->data, function ($product) use ($search) {
             return stripos($product->product_name, $search) !== false;
@@ -160,7 +167,7 @@ class PostpaidService extends BaseService
         return ProductResponse::from([
             'success' => $allProducts->success,
             'message' => $allProducts->message,
-            'data' => array_values($filteredProducts)
+            'data' => array_values($filteredProducts),
         ]);
     }
 

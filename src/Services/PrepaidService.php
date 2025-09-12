@@ -2,11 +2,11 @@
 
 namespace Tripay\PPOB\Services;
 
-use Tripay\PPOB\DTO\Response\CategoryResponse;
-use Tripay\PPOB\DTO\Response\ProductResponse;
-use Tripay\PPOB\DTO\Response\ProductDetailResponse;
-use Tripay\PPOB\DTO\Response\TransactionResponse;
 use Tripay\PPOB\DTO\Request\PrepaidTransactionRequest;
+use Tripay\PPOB\DTO\Response\CategoryResponse;
+use Tripay\PPOB\DTO\Response\ProductDetailResponse;
+use Tripay\PPOB\DTO\Response\ProductResponse;
+use Tripay\PPOB\DTO\Response\TransactionResponse;
 
 class PrepaidService extends BaseService
 {
@@ -16,6 +16,7 @@ class PrepaidService extends BaseService
     public function getCategories(): CategoryResponse
     {
         $response = $this->getCachedData('prepaid_categories', $this->getEndpoint('categories'));
+
         return CategoryResponse::from($response);
     }
 
@@ -25,6 +26,7 @@ class PrepaidService extends BaseService
     public function getOperators(): CategoryResponse
     {
         $response = $this->getCachedData('prepaid_operators', $this->getEndpoint('operators'));
+
         return CategoryResponse::from($response);
     }
 
@@ -40,7 +42,7 @@ class PrepaidService extends BaseService
 
         $cacheKey = 'prepaid_products_' . md5(serialize($params));
         $response = $this->getCachedData($cacheKey, $this->getEndpoint('products'), $params);
-        
+
         return ProductResponse::from($response);
     }
 
@@ -51,8 +53,9 @@ class PrepaidService extends BaseService
     {
         $params = ['product' => $productId];
         $cacheKey = 'prepaid_product_detail_' . $productId;
-        
+
         $response = $this->getCachedData($cacheKey, $this->getEndpoint('product_detail'), $params);
+
         return ProductDetailResponse::from($response);
     }
 
@@ -62,6 +65,7 @@ class PrepaidService extends BaseService
     public function createTransaction(PrepaidTransactionRequest $request): TransactionResponse
     {
         $response = $this->client->post($this->getEndpoint('transaction'), $request->toArray());
+
         return TransactionResponse::from($response);
     }
 
@@ -75,6 +79,7 @@ class PrepaidService extends BaseService
         string $pin
     ): TransactionResponse {
         $request = PrepaidTransactionRequest::create($productId, $phoneNumber, $apiTrxId, $pin);
+
         return $this->createTransaction($request);
     }
 
@@ -100,7 +105,7 @@ class PrepaidService extends BaseService
     public function searchProducts(string $search): ProductResponse
     {
         $allProducts = $this->getProducts();
-        
+
         // Filter products by search term
         $filteredProducts = array_filter($allProducts->data, function ($product) use ($search) {
             return stripos($product->product_name, $search) !== false;
@@ -110,7 +115,7 @@ class PrepaidService extends BaseService
         return ProductResponse::from([
             'success' => $allProducts->success,
             'message' => $allProducts->message,
-            'data' => array_values($filteredProducts)
+            'data' => array_values($filteredProducts),
         ]);
     }
 

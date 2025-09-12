@@ -34,10 +34,10 @@ class ProductResponse extends DataTransferObject
     protected function fillFromArray(array $data): void
     {
         parent::fillFromArray($data);
-        
+
         if (isset($data['data']) && is_array($data['data'])) {
             $this->data = array_map(
-                fn($item) => ProductData::from($item), 
+                fn ($item) => ProductData::from($item),
                 $data['data']
             );
         }
@@ -53,7 +53,7 @@ class ProductDetailResponse extends DataTransferObject
     protected function fillFromArray(array $data): void
     {
         parent::fillFromArray($data);
-        
+
         if (isset($data['data']) && is_array($data['data'])) {
             $this->data = ProductDetailData::from($data['data']);
         }

@@ -25,6 +25,7 @@ class ValidationException extends TripayException
     public function setErrors(array $errors): static
     {
         $this->errors = $errors;
+
         return $this;
     }
 

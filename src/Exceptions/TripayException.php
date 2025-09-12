@@ -22,6 +22,7 @@ class TripayException extends Exception
     public function setContext(array $context): static
     {
         $this->context = $context;
+
         return $this;
     }
 }

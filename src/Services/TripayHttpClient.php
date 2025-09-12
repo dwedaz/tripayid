@@ -3,10 +3,10 @@
 namespace Tripay\PPOB\Services;
 
 use Illuminate\Http\Client\Factory as HttpFactory;
-use Illuminate\Http\Client\Response;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Tripay\PPOB\Exceptions\ApiException;
 use Tripay\PPOB\Exceptions\AuthenticationException;
 use Tripay\PPOB\Exceptions\ValidationException;
@@ -40,9 +40,9 @@ class TripayHttpClient
     protected function resolveBaseUri(): string
     {
         $mode = $this->config['mode'] ?? 'sandbox';
-        
-        return $mode === 'production' 
-            ? $this->config['production_base_uri'] 
+
+        return $mode === 'production'
+            ? $this->config['production_base_uri']
             : $this->config['sandbox_base_uri'];
     }
 
@@ -59,7 +59,7 @@ class TripayHttpClient
     protected function makeRequest(string $method, string $endpoint, array $data = []): array
     {
         $url = $this->baseUri . $endpoint;
-        
+
         // Create HTTP client with default configuration
         $request = $this->http
             ->withHeaders([
@@ -69,7 +69,7 @@ class TripayHttpClient
             ])
             ->timeout($this->config['timeout'] ?? 30)
             ->retry(
-                $this->config['retry'] ?? 3, 
+                $this->config['retry'] ?? 3,
                 $this->config['retry_delay'] ?? 1000
             );
 
@@ -94,6 +94,7 @@ class TripayHttpClient
 
         } catch (RequestException $e) {
             $this->logError($e);
+
             throw $this->transformException($e);
         }
     }
@@ -105,12 +106,12 @@ class TripayHttpClient
         // Handle Tripay's response structure
         if (isset($data['success']) && $data['success'] === false) {
             $message = $data['message'] ?? 'Unknown error occurred';
-            
+
             // Handle specific error cases
             if (str_contains(strtolower($message), 'invalid api key')) {
                 throw ApiException::invalidApiKey($message);
             }
-            
+
             throw ApiException::badRequest($message, $data);
         }
 
@@ -121,16 +122,16 @@ class TripayHttpClient
     {
         $response = $e->response;
         $statusCode = $response?->status();
-        
+
         return match ($statusCode) {
             401 => AuthenticationException::invalidCredentials(),
             422 => ValidationException::make(
-                $response->json()['errors'] ?? [], 
+                $response->json()['errors'] ?? [],
                 'Validation failed'
             ),
             429 => ApiException::rateLimited(),
             500, 502, 503, 504 => ApiException::serverError(
-                'Server error occurred', 
+                'Server error occurred',
                 $statusCode
             ),
             default => ApiException::networkError($e->getMessage())
@@ -139,13 +140,13 @@ class TripayHttpClient
 
     protected function shouldLogRequests(): bool
     {
-        return $this->config['logging']['enabled'] ?? false 
+        return $this->config['logging']['enabled'] ?? false
             && $this->config['logging']['requests'] ?? false;
     }
 
     protected function shouldLogResponses(): bool
     {
-        return $this->config['logging']['enabled'] ?? false 
+        return $this->config['logging']['enabled'] ?? false
             && $this->config['logging']['responses'] ?? false;
     }
 
@@ -153,7 +154,7 @@ class TripayHttpClient
     {
         $channel = $this->config['logging']['channel'] ?? 'default';
         $level = $this->config['logging']['level'] ?? 'info';
-        
+
         Log::channel($channel)->log($level, 'Tripay API Request', [
             'method' => $method,
             'url' => $url,
@@ -165,7 +166,7 @@ class TripayHttpClient
     {
         $channel = $this->config['logging']['channel'] ?? 'default';
         $level = $this->config['logging']['level'] ?? 'info';
-        
+
         Log::channel($channel)->log($level, 'Tripay API Response', [
             'status' => $response->status(),
             'body' => $response->json(),
@@ -175,7 +176,7 @@ class TripayHttpClient
     protected function logError(\Exception $e): void
     {
         $channel = $this->config['logging']['channel'] ?? 'default';
-        
+
         Log::channel($channel)->error('Tripay API Error', [
             'message' => $e->getMessage(),
             'trace' => $e->getTraceAsString(),
@@ -187,7 +188,7 @@ class TripayHttpClient
      */
     public function getCached(string $cacheKey, string $endpoint, array $params = [], ?int $ttl = null): array
     {
-        if (!$this->config['cache']['enabled']) {
+        if (! $this->config['cache']['enabled']) {
             return $this->get($endpoint, $params);
         }
 
@@ -207,7 +208,7 @@ class TripayHttpClient
     {
         $prefix = $this->config['cache']['prefix'] . ':';
         $store = Cache::store($this->config['cache']['store']);
-        
+
         // This is a simplified implementation
         // In production, you might want to use Redis SCAN or similar for efficiency
         if (method_exists($store, 'flush')) {

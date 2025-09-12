@@ -12,6 +12,7 @@ class ServerService extends BaseService
     public function checkServer(): ServerResponse
     {
         $response = $this->client->get($this->getEndpoint('check'));
+
         return ServerResponse::from($response);
     }
 
@@ -22,6 +23,7 @@ class ServerService extends BaseService
     {
         try {
             $response = $this->checkServer();
+
             return $response->success;
         } catch (\Exception $e) {
             return false;

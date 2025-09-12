@@ -40,7 +40,7 @@ class BillCheckResponse extends DataTransferObject
     protected function fillFromArray(array $data): void
     {
         parent::fillFromArray($data);
-        
+
         if (isset($data['data']) && is_array($data['data'])) {
             $this->data = BillCheckData::from($data['data']);
         }
@@ -73,10 +73,10 @@ class TransactionHistoryResponse extends DataTransferObject
     protected function fillFromArray(array $data): void
     {
         parent::fillFromArray($data);
-        
+
         if (isset($data['data']) && is_array($data['data'])) {
             $this->data = array_map(
-                fn($item) => TransactionHistoryData::from($item), 
+                fn ($item) => TransactionHistoryData::from($item),
                 $data['data']
             );
         }
@@ -92,7 +92,7 @@ class TransactionDetailResponse extends DataTransferObject
     protected function fillFromArray(array $data): void
     {
         parent::fillFromArray($data);
-        
+
         if (isset($data['data']) && is_array($data['data'])) {
             $this->data = TransactionHistoryData::from($data['data']);
         }

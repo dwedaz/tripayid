@@ -12,6 +12,7 @@ class BalanceService extends BaseService
     public function getBalance(): BalanceResponse
     {
         $response = $this->client->get($this->getEndpoint('check'));
+
         return BalanceResponse::from($response);
     }
 
@@ -21,6 +22,7 @@ class BalanceService extends BaseService
     public function getCachedBalance(int $ttl = 300): BalanceResponse
     {
         $response = $this->getCachedData('balance', $this->getEndpoint('check'), [], $ttl);
+
         return BalanceResponse::from($response);
     }
 
@@ -30,6 +32,7 @@ class BalanceService extends BaseService
     public function getBalanceAmount(): float
     {
         $balance = $this->getBalance();
+
         return $balance->saldo ?? 0.0;
     }
 
@@ -39,6 +42,7 @@ class BalanceService extends BaseService
     public function isSufficientBalance(float $amount): bool
     {
         $balance = $this->getBalanceAmount();
+
         return $balance >= $amount;
     }
 

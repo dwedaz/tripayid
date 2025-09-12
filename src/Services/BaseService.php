@@ -16,7 +16,7 @@ abstract class BaseService
      */
     protected function buildQueryParams(array $params): array
     {
-        return array_filter($params, fn($value) => $value !== null);
+        return array_filter($params, fn ($value) => $value !== null);
     }
 
     /**
@@ -24,7 +24,7 @@ abstract class BaseService
      */
     protected function buildPayload(array $data): array
     {
-        return array_filter($data, fn($value) => $value !== null);
+        return array_filter($data, fn ($value) => $value !== null);
     }
 
     /**

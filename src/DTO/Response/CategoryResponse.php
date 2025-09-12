@@ -21,10 +21,10 @@ class CategoryResponse extends DataTransferObject
     protected function fillFromArray(array $data): void
     {
         parent::fillFromArray($data);
-        
+
         if (isset($data['data']) && is_array($data['data'])) {
             $this->data = array_map(
-                fn($item) => CategoryData::from($item), 
+                fn ($item) => CategoryData::from($item),
                 $data['data']
             );
         }

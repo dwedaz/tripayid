@@ -2,19 +2,19 @@
 
 namespace Tripay\PPOB;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
-use Tripay\PPOB\Http\Middleware\VerifyTripaySignature;
-use Tripay\PPOB\Services\TripayHttpClient;
-use Tripay\PPOB\Services\ServerService;
-use Tripay\PPOB\Services\BalanceService;
-use Tripay\PPOB\Services\PrepaidService;
-use Tripay\PPOB\Services\PostpaidService;
-use Tripay\PPOB\Services\TransactionService;
+use Illuminate\Support\ServiceProvider;
+use Tripay\PPOB\Console\Commands\ClearCacheCommand;
 use Tripay\PPOB\Console\Commands\SyncCategoriesCommand;
 use Tripay\PPOB\Console\Commands\SyncProductsCommand;
 use Tripay\PPOB\Console\Commands\TestConnectionCommand;
-use Tripay\PPOB\Console\Commands\ClearCacheCommand;
+use Tripay\PPOB\Http\Middleware\VerifyTripaySignature;
+use Tripay\PPOB\Services\BalanceService;
+use Tripay\PPOB\Services\PostpaidService;
+use Tripay\PPOB\Services\PrepaidService;
+use Tripay\PPOB\Services\ServerService;
+use Tripay\PPOB\Services\TransactionService;
+use Tripay\PPOB\Services\TripayHttpClient;
 
 class TripayServiceProvider extends ServiceProvider
 {

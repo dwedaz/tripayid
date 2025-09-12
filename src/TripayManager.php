@@ -2,10 +2,10 @@
 
 namespace Tripay\PPOB;
 
-use Tripay\PPOB\Services\ServerService;
 use Tripay\PPOB\Services\BalanceService;
-use Tripay\PPOB\Services\PrepaidService;
 use Tripay\PPOB\Services\PostpaidService;
+use Tripay\PPOB\Services\PrepaidService;
+use Tripay\PPOB\Services\ServerService;
 use Tripay\PPOB\Services\TransactionService;
 
 class TripayManager

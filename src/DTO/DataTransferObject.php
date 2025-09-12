@@ -30,21 +30,21 @@ abstract class DataTransferObject
 
         foreach ($properties as $property) {
             $propertyName = $property->getName();
-            
+
             if (isset($data[$propertyName])) {
                 $value = $data[$propertyName];
-                
+
                 // Handle nested DTOs
                 if ($property->hasType()) {
                     $type = $property->getType();
-                    if ($type && !$type->isBuiltin()) {
+                    if ($type && ! $type->isBuiltin()) {
                         $typeName = $type->getName();
                         if (is_subclass_of($typeName, self::class)) {
                             $value = is_array($value) ? $typeName::from($value) : $value;
                         }
                     }
                 }
-                
+
                 $this->{$propertyName} = $value;
             }
         }
@@ -74,7 +74,7 @@ abstract class DataTransferObject
             $result[$propertyName] = $value;
         }
 
-        return array_filter($result, fn($value) => $value !== null);
+        return array_filter($result, fn ($value) => $value !== null);
     }
 
     /**
@@ -91,6 +91,7 @@ abstract class DataTransferObject
     public function only(array $properties): array
     {
         $data = $this->toArray();
+
         return array_intersect_key($data, array_flip($properties));
     }
 
@@ -100,6 +101,7 @@ abstract class DataTransferObject
     public function except(array $properties): array
     {
         $data = $this->toArray();
+
         return array_diff_key($data, array_flip($properties));
     }
 }
