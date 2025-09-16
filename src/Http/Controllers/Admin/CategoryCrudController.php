@@ -27,6 +27,10 @@ class CategoryCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        CRUD::column('id')
+            ->label('ID')
+            ->type('text');
+
         CRUD::column('name')
             ->label('Category Name')
             ->type('text');
