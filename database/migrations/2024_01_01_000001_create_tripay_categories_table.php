@@ -15,6 +15,7 @@ return new class extends Migration
             $table->enum('billing_type', ['prepaid', 'postpaid'])->default('prepaid');
             $table->integer('sort_order')->default(0);
             $table->timestamp('synced_at')->nullable();
+            $table->boolean('status')->default(true);
             $table->timestamps();
 
             $table->index(['type', 'status']);
