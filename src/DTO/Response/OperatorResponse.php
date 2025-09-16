@@ -9,7 +9,8 @@ class OperatorData extends DataTransferObject
     public readonly int $id;
     public readonly string $code;
     public readonly ?string $name;
-    public readonly ?string $category_id;
+    public readonly ?int $category_id;
+    public readonly ?string $type;
     public readonly bool $status;
 
     
@@ -19,6 +20,7 @@ class OperatorData extends DataTransferObject
         $this->id = $data['id'] ?? 0;
         $this->code = $data['product_id'] ?? '';
         $this->name = $data['product_name'] ?? null;
+        $this->type = $data['type'] ?? null;
         $this->category_id = $data['pembeliankategori_id'] ?? null;
         $this->status = $data['status'] ?? null;
     }
