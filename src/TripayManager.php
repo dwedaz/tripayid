@@ -30,6 +30,7 @@ class TripayManager
      */
     public function balance(): BalanceService
     {
+    
         return $this->services['balance'];
     }
 

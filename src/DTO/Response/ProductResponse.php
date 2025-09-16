@@ -19,14 +19,15 @@ class ProductData extends DataTransferObject
     
     public function __construct(array $data = [])
     {
-        $this->id = $data['product_id'] ?? '';
+     
+        $this->id = $data['id'] ?? '';
         $this->name = $data['product_name'] ?? '';
-        $this->code = $data['product_id'] ?? null;
+        $this->code = $data['code'] ?? null;
         $this->category_id = $data['pembeliankategori_id'] ?? null;
         $this->operator_id = $data['pembelianoperator_id'] ?? null;
         $this->price = isset($data['price']) ? (float)$data['price'] : null;
         $this->description = $data['desc'] ?? null;
-        $this->status = isset($data['status']) ? (bool)$data['status'] : null;
+        $this->status = (bool)$data['status'];
     }
 }
 

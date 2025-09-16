@@ -32,8 +32,7 @@ class BalanceService extends BaseService
     public function getBalanceAmount(): float
     {
         $balance = $this->getBalance();
-
-        return $balance->saldo ?? 0.0;
+        return $balance->getBalanceAmount();
     }
 
     /**

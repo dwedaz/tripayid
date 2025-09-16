@@ -107,6 +107,8 @@ try {
     echo "   Connection Status: " . ($isConnected ? "✅ Connected" : "❌ Failed") . "\n\n";
     
     if ($isConnected) {
+          (Tripay::balance()->getBalanceAmount()); ;
+        
         /*
         echo "2. Testing Server Health Check...\n";
         $serverResponse = Tripay::server()->checkServer();
@@ -171,10 +173,10 @@ try {
         
         echo "7. Testing Prepaid Products List...\n";
         try {
-            $products = Tripay::prepaid()->getProducts();
+            $products = Tripay::postpaid()->getProducts();
             echo "   Products Status: " . ($products->success ? "✅ Success" : "❌ Failed") . "\n";
             echo "   Total Products: " . count($products->data) . "\n";
-            print_r($products->data);
+          
             
             echo "\n";
         } catch (Exception $e) {
