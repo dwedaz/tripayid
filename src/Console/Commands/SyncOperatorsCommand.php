@@ -113,23 +113,24 @@ class SyncOperatorsCommand extends Command
             foreach ($response->data as $operatorData) {
                 try {
                     // Convert API response to array
-                    $categoryId = $operatorData->category_id ?? null;
+                    $categoryId = isset($operatorData->category_id) ? $operatorData->category_id : null;
                     
                     // Check if category exists in database, if not set to null
                     if ($categoryId) {
                         $categoryExists = Category::where('id', $categoryId)->exists();
                         if (!$categoryExists) {
-                            $this->warn("Category ID {$categoryId} not found in database for operator {$operatorData->operator_name ?? $operatorData->name}. Setting category_id to null.");
+                            $operatorName = isset($operatorData->operator_name) ? $operatorData->operator_name : $operatorData->name;
+                            $this->warn("Category ID {$categoryId} not found in database for operator {$operatorName}. Setting category_id to null.");
                             $categoryId = null;
                         }
                     }
                     
                     $data = [
-                        'id' => $operatorData->operator_id ?? $operatorData->id,
-                        'name' => $operatorData->operator_name ?? $operatorData->name,
-                        'code' => $operatorData->operator_code ?? $operatorData->code ?? null,
-                        'type' => $operatorData->type ?? $type,
-                        'status' => $operatorData->status ?? false,
+                        'id' => isset($operatorData->operator_id) ? $operatorData->operator_id : $operatorData->id,
+                        'name' => isset($operatorData->operator_name) ? $operatorData->operator_name : $operatorData->name,
+                        'code' => isset($operatorData->operator_code) ? $operatorData->operator_code : (isset($operatorData->code) ? $operatorData->code : null),
+                        'type' => isset($operatorData->type) ? $operatorData->type : $type,
+                        'status' => isset($operatorData->status) ? $operatorData->status : false,
                         'category_id' => $categoryId,
                         'billing_type' => $type,
                         'synced_at' => now(),
