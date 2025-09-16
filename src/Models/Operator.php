@@ -18,6 +18,7 @@ class Operator extends Model
         'id',
         'code',
         'name',
+        'type',
         'status',
         'category_id',
         'billing_type',

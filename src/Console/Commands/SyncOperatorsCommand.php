@@ -106,8 +106,8 @@ class SyncOperatorsCommand extends Command
                         'name' => $operatorData->operator_name ?? $operatorData->name,
                         'code' => $operatorData->operator_code ?? $operatorData->code ?? null,
                         'type' => $operatorData->type ?? $type,
-                        'category_id' => $operatorData->category_id ?? null,
                         'status' => $operatorData->status ?? false,
+                        'category_id' => $operatorData->category_id ?? null,
                         'billing_type' => $type,
                         'synced_at' => now(),
                     ];
