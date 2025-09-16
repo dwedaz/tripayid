@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Tripay\PPOB\Console\Commands\ClearCacheCommand;
 use Tripay\PPOB\Console\Commands\SyncCategoriesCommand;
+use Tripay\PPOB\Console\Commands\SyncOperatorsCommand;
 use Tripay\PPOB\Console\Commands\SyncProductsCommand;
 use Tripay\PPOB\Console\Commands\TestConnectionCommand;
 use Tripay\PPOB\Http\Middleware\VerifyTripaySignature;
@@ -43,6 +44,7 @@ class TripayServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 SyncCategoriesCommand::class,
+                SyncOperatorsCommand::class,
                 SyncProductsCommand::class,
                 TestConnectionCommand::class,
                 ClearCacheCommand::class,
