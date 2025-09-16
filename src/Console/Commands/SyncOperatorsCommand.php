@@ -28,6 +28,18 @@ class SyncOperatorsCommand extends Command
     public function handle()
     {
         $this->info('🔄 Syncing operators from Tripay API...');
+        
+        // Check if categories exist in database
+        $categoryCount = Category::count();
+        if ($categoryCount === 0) {
+            $this->warn('⚠️  No categories found in database. Consider running "php artisan tripay:sync-categories" first.');
+            if (!$this->confirm('Do you want to continue syncing operators without category relationships?')) {
+                $this->info('Operation cancelled.');
+                return Command::SUCCESS;
+            }
+        } else {
+            $this->info("📊 Found {$categoryCount} categories in database.");
+        }
 
         $type = $this->option('type');
         $force = $this->option('force');
@@ -101,13 +113,24 @@ class SyncOperatorsCommand extends Command
             foreach ($response->data as $operatorData) {
                 try {
                     // Convert API response to array
+                    $categoryId = $operatorData->category_id ?? null;
+                    
+                    // Check if category exists in database, if not set to null
+                    if ($categoryId) {
+                        $categoryExists = Category::where('id', $categoryId)->exists();
+                        if (!$categoryExists) {
+                            $this->warn("Category ID {$categoryId} not found in database for operator {$operatorData->operator_name ?? $operatorData->name}. Setting category_id to null.");
+                            $categoryId = null;
+                        }
+                    }
+                    
                     $data = [
                         'id' => $operatorData->operator_id ?? $operatorData->id,
                         'name' => $operatorData->operator_name ?? $operatorData->name,
                         'code' => $operatorData->operator_code ?? $operatorData->code ?? null,
                         'type' => $operatorData->type ?? $type,
                         'status' => $operatorData->status ?? false,
-                        'category_id' => $operatorData->category_id ?? null,
+                        'category_id' => $categoryId,
                         'billing_type' => $type,
                         'synced_at' => now(),
                     ];
