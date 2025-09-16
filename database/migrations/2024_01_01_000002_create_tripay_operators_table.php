@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('tripay_operators', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique()->index();
-            $table->string('name')->nullable();
+            $table->string('code')->nullable();
+            $table->string('name')->unique()->index();
             $table->boolean('status')->default(true);
             $table->unsignedBigInteger('category_id')->nullable()->index();
             $table->string('type')->nullable();

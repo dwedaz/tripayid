@@ -16,12 +16,13 @@ class OperatorData extends DataTransferObject
     
     public function __construct(array $data = [])
     {
+     
        
         $this->id = $data['id'] ?? 0;
         $this->code = $data['product_id'] ?? '';
         $this->name = $data['product_name'] ?? null;
         $this->type = $data['type'] ?? null;
-        $this->category_id = $data['pembeliankategori_id'] ?? null;
+        $this->category_id = $data['pembeliankategori_id'] ?? $data['pembayarankategori_id'] ?? null;
         $this->status = $data['status'] ?? null;
     }
 }
@@ -35,6 +36,7 @@ class OperatorResponse extends DataTransferObject
 
     public function __construct(array $data = [])
     {
+        print_r($data);
         $this->success = $data['success'] ?? false;
         $this->message = $data['message'] ?? '';
         $this->data = isset($data['data']) && is_array($data['data']) 

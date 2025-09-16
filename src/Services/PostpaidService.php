@@ -6,6 +6,7 @@ use Tripay\PPOB\DTO\Request\BillCheckRequest;
 use Tripay\PPOB\DTO\Request\BillPaymentRequest;
 use Tripay\PPOB\DTO\Response\BillCheckResponse;
 use Tripay\PPOB\DTO\Response\CategoryResponse;
+use Tripay\PPOB\DTO\Response\OperatorResponse;
 use Tripay\PPOB\DTO\Response\ProductDetailResponse;
 use Tripay\PPOB\DTO\Response\ProductResponse;
 use Tripay\PPOB\DTO\Response\TransactionResponse;
@@ -25,11 +26,11 @@ class PostpaidService extends BaseService
     /**
      * Get postpaid operators
      */
-    public function getOperators(): CategoryResponse
+    public function getOperators(): OperatorResponse
     {
         $response = $this->getCachedData('postpaid_operators', $this->getEndpoint('operators'));
 
-        return CategoryResponse::from($response);
+        return OperatorResponse::from($response);
     }
 
     /**
