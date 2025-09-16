@@ -98,14 +98,15 @@ class SyncOperatorsCommand extends Command
             $progressBar = $this->output->createProgressBar(count($response->data));
             $progressBar->start();
 
-            foreach ($response->data as $categoryData) {
+            foreach ($response->data as $operatorData) {
                 try {
                     // Convert API response to array
                     $data = [
-                        'id' => $categoryData->category_id ?? $categoryData->id,
-                        'name' => $categoryData->category_name ?? $categoryData->name,
-                        'type' => $categoryData->type ?? $type,
-                        'status' => $categoryData->status ?? false,
+                        'id' => $operatorData->operator_id ?? $operatorData->id,
+                        'name' => $operatorData->operator_name ?? $operatorData->name,
+                        'code' => $operatorData->operator_code ?? $operatorData->code ?? null,
+                        'type' => $operatorData->type ?? $type,
+                        'status' => $operatorData->status ?? false,
                         'billing_type' => $type,
                         'synced_at' => now(),
                     ];
@@ -120,12 +121,12 @@ class SyncOperatorsCommand extends Command
                         }
                         // Skip if not forcing update
                     } else {
-                        Category::create($data);
+                        Operator::create($data);
                         $synced++;
                     }
 
                 } catch (\Exception $e) {
-                    $this->error("Error processing category: " . $e->getMessage());
+                    $this->error("Error processing operator: " . $e->getMessage());
                     $errors++;
                 }
 
@@ -136,7 +137,7 @@ class SyncOperatorsCommand extends Command
             $this->newLine();
 
         } catch (\Exception $e) {
-            $this->error("Error fetching {$type} categories: " . $e->getMessage());
+            $this->error("Error fetching {$type} operators: " . $e->getMessage());
             $errors++;
         }
 
