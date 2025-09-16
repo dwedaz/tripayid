@@ -13,9 +13,9 @@ class CategoryData extends DataTransferObject
 
     public function __construct(array $data = [])
     {
-          
-        $this->id =  $data['product_id'] ?? '';
-        $this->name =$data['product_name'] ?? '';
+      
+        $this->id =  $data['product_id'] ?? $data['id'] ?? '';
+        $this->name =$data['product_name'] ??   $data['name'] ?? '';
         $this->type = $data['type'] ?? null;
         $this->status = isset($data['status']) ? (bool)$data['status'] : false;
     }

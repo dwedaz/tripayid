@@ -133,7 +133,7 @@ try {
         echo "5. Testing Prepaid Categories...\n";
        
         try {
-            $categories = Tripay::prepaid()->getCategories(); 
+            $categories = Tripay::postpaid()->getCategories(); 
             print_r($categories);
             echo "   Categories Status: " . ($categories->success ? "✅ Success" : "❌ Failed") . "\n";
             echo "   Total Categories: " . count($categories->data) . "\n";
@@ -149,27 +149,27 @@ try {
         } catch (Exception $e) {
             echo "   Categories Error: " . $e->getMessage() . "\n\n";
         }
-        */
-        
-        // echo "6. Testing Prepaid Operators...\n";
-        // try {
-        //     $operators = Tripay::prepaid()->getOperators();
-        //     print_r($operators);
-        //     exit;
-        //     echo "   Operators Status: " . ($operators->success ? "✅ Success" : "❌ Failed") . "\n";
-        //     echo "   Total Operators: " . count($operators->data) . "\n";
-        //     if (count($operators->data) > 0) {
-        //         echo "   Sample Operators: ";
-        //         $sampleOperators = array_slice($operators->data, 0, 3);
-        //         foreach ($sampleOperators as $i => $operator) {
-        //             echo ($i > 0 ? ", " : "") . $operator->name;
-        //         }
-        //         echo "\n";
-        //     }
-        //     echo "\n";
-        // } catch (Exception $e) {
-        //     echo "   Operators Error: " . $e->getMessage() . "\n\n";
-        // }
+        exit;
+         */
+        echo "6. Testing Prepaid Operators...\n";
+        try {
+            $operators = Tripay::postpaid()->getOperators();
+            print_r($operators);
+            exit;
+            echo "   Operators Status: " . ($operators->success ? "✅ Success" : "❌ Failed") . "\n";
+            echo "   Total Operators: " . count($operators->data) . "\n";
+            if (count($operators->data) > 0) {
+                echo "   Sample Operators: ";
+                $sampleOperators = array_slice($operators->data, 0, 3);
+                foreach ($sampleOperators as $i => $operator) {
+                    echo ($i > 0 ? ", " : "") . $operator->name;
+                }
+                echo "\n";
+            }
+            echo "\n";
+        } catch (Exception $e) {
+            echo "   Operators Error: " . $e->getMessage() . "\n\n";
+        }
         
         echo "7. Testing Prepaid Products List...\n";
         try {

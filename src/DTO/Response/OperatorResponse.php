@@ -15,6 +15,7 @@ class OperatorData extends DataTransferObject
     
     public function __construct(array $data = [])
     {
+       
         $this->id = $data['id'] ?? 0;
         $this->code = $data['product_id'] ?? '';
         $this->name = $data['product_name'] ?? null;
