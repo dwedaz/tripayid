@@ -27,7 +27,7 @@ class CategoryCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        CRUD::column('category_name')
+        CRUD::column('name')
             ->label('Category Name')
             ->type('text');
 
@@ -47,13 +47,7 @@ class CategoryCrudController extends CrudController
                 },
             ]);
 
-        CRUD::column('products_count')
-            ->label('Products')
-            ->type('closure')
-            ->function(function($entry) {
-                return $entry->products()->count();
-            });
-
+       
         CRUD::column('sort_order')
             ->label('Sort Order')
             ->type('number');
